@@ -5,6 +5,6 @@
     password: Password@123
     login_unix_socket: /var/run/mysqld/mysqld.sock
     priv: "*.*:ALL,GRANT"
-    host: localhost
+    host: 10.25.55.178
     state: present
  
