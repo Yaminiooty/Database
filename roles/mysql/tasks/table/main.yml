@@ -1,25 +1,36 @@
 ---
 
-- name: To create table
-  command:
-    cmd: |
-      mysql -u admin -pPassword@123 -e '
-      USE LZ;
-      CREATE TABLE idiots (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50) NOT NULL,
-        email VARCHAR(100) NOT NULL UNIQUE
-      );
-      '
-      
-- name: Insert records into table
-  command:
-    cmd: |
-      mysql -u admin -pPassword@123 -e '
-      USE your_database;
-      INSERT INTO idiots (name, email) VALUES ("Ashok", "Ashok@example.com");
-      INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
-      '
+- name: Check if table exists
+  mysql_db:
+    name: LZ
+    state: table
+    table: idiots
+  register: table_check
+  ignore_errors: true
+
+- name: Display message if table already exists
+  debug:
+    msg: "Table 'idiots' already exists in database 'your_database'"
+  when: table_check|success
+
+- name: Create table if it doesn't exist
+  mysql_db:
+    name: your_database
+    state: table
+    table: idiots
+    columns:
+      - name: id
+        type: INT
+        primary_key: yes
+        auto_increment: yes
+      - name: name
+        type: VARCHAR(50)
+        not_null: yes
+      - name: email
+        type: VARCHAR(100)
+        not_null: yes
+        unique: yes
+  when: table_check|failed
 
 
      
