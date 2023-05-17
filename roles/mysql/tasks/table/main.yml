@@ -1,19 +1,17 @@
 ---
 
 - name: To create table
-  community.mysql.mysql_query:
-    host: localhost
-    login_db: LZ
-    login_user: admin
-    login_password: Password@123
-    query:
-    - CREATE TABLE idiots (
+  command: 
+    cmd: " mysql -u admin -p Password@123 -e
+      'CREATE TABLE idiots (
       id INT AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(50) NOT NULL,
       email VARCHAR(100) NOT NULL UNIQUE
-            );
+            );' "
+     
+     
 
-    - INSERT INTO idiots (name, email) VALUES
-      ('Yamini', 'Kumaran.hpe.com'),
-      ('Sai', 'Sai@example.com');
+   
+  
+    
 
