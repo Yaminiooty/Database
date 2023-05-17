@@ -20,6 +20,9 @@
 - name: Print playbook directory
   debug:
     var: playbook_dir
+- name: Print AWX project path
+  debug:
+    var: awx_project_path
 
 
 - name: Execute SQL queries
