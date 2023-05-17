@@ -3,10 +3,9 @@
 - name: Check if table exists
   shell:
     cmd: |
-      mysql -u admin -pPassword@123 -e 'USE LZ; SHOW TABLES LIKE "idiots";'
+      mysql -u admin -pPassword@123 -N -s -e 'USE LZ; SELECT 1 FROM information_schema.tables WHERE table_schema = "LZ" AND table_name = "idiots" LIMIT 1;'
   register: table_check_output
-  changed_when: false
-  failed_when: "'idiots' in table_check_output.stdout"
+  failed_when: table_check_output.rc != 0
 
 - name: Create table if it doesn't exist
   command:
@@ -19,7 +18,7 @@
         email VARCHAR(100) NOT NULL UNIQUE
       );
       '
-  when: not table_check_output.stdout
+  when: table_check_output.rc != 0
 
 - name: Insert records into table
   command:
@@ -29,4 +28,5 @@
       INSERT INTO idiots (name, email) VALUES ("Ashok", "Ashok@example.com");
       INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
       '
+
 
