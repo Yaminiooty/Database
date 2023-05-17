@@ -1,18 +1,25 @@
 ---
 
 - name: Check if table exists
+  shell:
+    cmd: |
+      mysql -u admin -pPassword@123 -e 'USE LZ; SHOW TABLES LIKE "idiots";'
+  register: table_check_output
+  changed_when: false
+  failed_when: table_check_output.stdout_lines | length > 0
+
+- name: Create table if it doesn't exist
   command:
     cmd: |
       mysql -u admin -pPassword@123 -e '
       USE LZ;
-      CREATE TABLE IF NOT EXISTS idiots (
+      CREATE TABLE idiots (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE
       );
       '
-    register: create_table_output
-    failed_when: "'Table already exists' not in create_table_output.stdout"
+  when: table_check_output.stdout_lines | length == 0
 
 - name: Insert records into table
   command:
@@ -22,10 +29,4 @@
       INSERT INTO idiots (name, email) VALUES ("Ashok", "Ashok@example.com");
       INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
       '
-
-     
-
-   
-  
-    
 
