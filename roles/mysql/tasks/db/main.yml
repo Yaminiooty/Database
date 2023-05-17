@@ -1,0 +1,11 @@
+
+---
+
+- name: Create db if it does not exist
+  mysql_db:
+    name: LZ
+    state: present
+    login_host: localhost
+    login_user: admin
+    login_password: Password@123
+    

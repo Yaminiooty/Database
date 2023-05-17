@@ -1,0 +1,10 @@
+---
+- name: Create MySQL user and grant privileges
+  mysql_user:
+    name: admin
+    password: Password@123
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    priv: "*.*:ALL,GRANT"
+    host: localhost
+    state: present
+ 

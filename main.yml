@@ -1,0 +1,8 @@
+---
+- name: Install Database
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - include_role:
+        name: mysql
+        tasks_from: main.yml
