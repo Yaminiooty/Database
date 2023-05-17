@@ -9,7 +9,7 @@
 - name: install PyMySQL
   become: yes
   apt:
-    name: PyMySQL
+    name: python3-pymysql
     state: present
     
 - name: Start MySQL service
