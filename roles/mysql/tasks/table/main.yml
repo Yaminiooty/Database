@@ -35,7 +35,7 @@
       INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
       '
   register: insert_output
-  failed_when: insert_output.rc != 0 or "'Duplicate entry' in insert_output.stderr"
+  ignore_errors: true
 
 - name: Display message for duplicate key
   debug:
