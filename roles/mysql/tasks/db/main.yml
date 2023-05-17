@@ -5,7 +5,7 @@
   mysql_db:
     name: LZ
     state: present
-    login_host: localhost
+    login_host: 10.25.55.178
     login_user: admin
     login_password: Password@123
     
