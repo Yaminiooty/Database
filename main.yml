@@ -1,6 +1,6 @@
 ---
 - name: Install Database
-  hosts: localhost
+  hosts: all
   gather_facts: true
   tasks:
     - include_role:
