@@ -4,6 +4,7 @@
   command:
     cmd: |
       mysql -u admin -pPassword@123 -e '
+      USE LZ;
       CREATE TABLE idiots (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
