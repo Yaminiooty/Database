@@ -1,5 +1,6 @@
 ---
 - name: Create MySQL user and grant privileges
+  become: true
   mysql_user:
     name: admin
     password: Password@123
