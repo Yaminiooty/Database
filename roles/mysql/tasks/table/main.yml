@@ -1,7 +1,7 @@
 ---
 
 - name: To create table
-  mysql_query:
+  community.mysql.mysql_query:
     host: localhost
     login_db: LZ
     login_user: admin
