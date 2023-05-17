@@ -11,6 +11,16 @@
         email VARCHAR(100) NOT NULL UNIQUE
       );
       '
+      
+- name: Insert records into table
+  command:
+    cmd: |
+      mysql -u admin -pPassword@123 -e '
+      USE your_database;
+      INSERT INTO idiots (name, email) VALUES ("Ashok", "Ashok@example.com");
+      INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
+      '
+
 
      
 
