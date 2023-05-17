@@ -12,6 +12,12 @@
     name: python3-pymysql
     state: present
     
+- name: Install MySQL client package
+   become: yes
+   apt:
+     name: mysql-client
+     state: present
+    
 - name: Start MySQL service
   become: yes
   service:
