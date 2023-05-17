@@ -16,6 +16,11 @@
 - name: Create table if it doesn't exist
   command: echo "Running SQL queries..."
   when: table_check_output.rc != 0
+  
+- name: Print playbook directory
+  debug:
+    var: playbook_dir
+
 
 - name: Execute SQL queries
   shell: mysql -u admin -pPassword@123 -e 'USE LZ' < "{{ playbook_dir }}/queries.sql"
