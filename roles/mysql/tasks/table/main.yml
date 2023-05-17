@@ -18,7 +18,7 @@
   when: table_check_output.rc != 0
 
 - name: Execute SQL queries
-  shell: mysql -u admin -pPassword@123 -e 'USE LZ; SOURCE queries.sql'
+  shell: mysql -u admin -pPassword@123 -e 'USE LZ' < queries.sql
   register: script_output
   ignore_errors: true
 
@@ -26,6 +26,7 @@
   debug:
     msg: "Duplicate key violation occurred."
   when: "'Duplicate entry' in script_output.stderr"
+
 
 
 
