@@ -19,6 +19,7 @@
     state: present
     
 - name: Install MySQLdb package
+  become: yes
   apt:
     name: python3-mysqldb
     state: present
