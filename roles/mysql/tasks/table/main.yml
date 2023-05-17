@@ -34,6 +34,13 @@
       INSERT INTO idiots (name, email) VALUES ("Ashok", "Ashok@example.com");
       INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
       '
+  register: insert_output
+  failed_when: "'Duplicate entry' in insert_output.stderr"
+
+- name: Display message for duplicate key
+  debug:
+    msg: "Duplicate key violation occurred."
+  when: "'Duplicate entry' in insert_output.stderr"
 
 
 
