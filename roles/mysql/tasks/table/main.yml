@@ -1,7 +1,7 @@
 ---
 
 - name: To create table
-  community.mysql.mysql_query:
+  mysql_query:
     login_db: LZ
     login_user: admin
     login_password: Password@123
