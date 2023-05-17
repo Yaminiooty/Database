@@ -14,33 +14,20 @@
   when: table_check_output.rc == 0
 
 - name: Create table if it doesn't exist
-  command:
-    cmd: |
-      mysql -u admin -pPassword@123 -e '
-      USE LZ;
-      CREATE TABLE idiots (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50) NOT NULL,
-        email VARCHAR(100) NOT NULL UNIQUE
-      );
-      '
+  command: echo "Running SQL queries..."
   when: table_check_output.rc != 0
 
-- name: Insert records into table
-  command:
-    cmd: |
-      mysql -u admin -pPassword@123 -e '
-      USE LZ;
-      INSERT INTO idiots (name, email) VALUES ("Ashok", "Ashok@example.com");
-      INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
-      '
-  register: insert_output
+- name: Execute SQL queries
+  script:
+    script: queries.sql
+  register: script_output
   ignore_errors: true
 
 - name: Display message for duplicate key
   debug:
     msg: "Duplicate key violation occurred."
-  when: "'Duplicate entry' in insert_output.stderr"
+  when: "'Duplicate entry' in script_output.stderr"
+
 
 
 
