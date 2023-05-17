@@ -6,7 +6,7 @@
       mysql -u admin -pPassword@123 -e 'USE LZ; SHOW TABLES LIKE "idiots";'
   register: table_check_output
   changed_when: false
-  failed_when: table_check_output.stdout_lines | length > 0
+  failed_when: "'idiots' in table_check_output.stdout"
 
 - name: Create table if it doesn't exist
   command:
@@ -19,7 +19,7 @@
         email VARCHAR(100) NOT NULL UNIQUE
       );
       '
-  when: table_check_output.stdout_lines | length == 0
+  when: not table_check_output.stdout
 
 - name: Insert records into table
   command:
