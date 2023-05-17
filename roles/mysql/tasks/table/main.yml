@@ -18,8 +18,7 @@
   when: table_check_output.rc != 0
 
 - name: Execute SQL queries
-  script:
-    script: queries.sql
+  command: mysql -u admin -pPassword@123 -e 'USE LZ; SOURCE queries.sql'
   register: script_output
   ignore_errors: true
 
