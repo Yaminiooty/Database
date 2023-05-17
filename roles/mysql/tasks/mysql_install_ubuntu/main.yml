@@ -5,7 +5,13 @@
   apt:
     name: mysql-server
     state: present
-
+    
+- name: install PyMySQL
+  become: yes
+  apt:
+    name: PyMySQL
+    state: present
+    
 - name: Start MySQL service
   become: yes
   service:
