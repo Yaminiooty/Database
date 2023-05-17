@@ -1,37 +1,32 @@
 ---
 
 - name: Check if table exists
-  mysql_db:
-    name: LZ
-    state: table
-    table: idiots
+  mysql_sql:
+    login_user: admin
+    login_password: Password@123
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    database: your_database
+    query: "SHOW TABLES LIKE 'idiots'"
   register: table_check
-  ignore_errors: true
 
 - name: Display message if table already exists
   debug:
     msg: "Table 'idiots' already exists in database 'your_database'"
-  when: table_check|success
+  when: table_check.stdout_lines | length > 0
 
 - name: Create table if it doesn't exist
-  mysql_db:
-    name: your_database
-    state: table
-    table: idiots
-    columns:
-      - name: id
-        type: INT
-        primary_key: yes
-        auto_increment: yes
-      - name: name
-        type: VARCHAR(50)
-        not_null: yes
-      - name: email
-        type: VARCHAR(100)
-        not_null: yes
-        unique: yes
-  when: table_check|failed
-
+  mysql_sql:
+    login_user: admin
+    login_password: Password@123
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    database: your_database
+    query: >
+      CREATE TABLE idiots (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        email VARCHAR(100) NOT NULL UNIQUE
+      )
+  when: table_check.stdout_lines | length == 0
 
      
 
