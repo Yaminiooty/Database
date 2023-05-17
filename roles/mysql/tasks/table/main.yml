@@ -1,32 +1,27 @@
 ---
 
 - name: Check if table exists
-  mysql_sql:
-    login_user: admin
-    login_password: Password@123
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    database: your_database
-    query: "SHOW TABLES LIKE 'idiots'"
-  register: table_check
-
-- name: Display message if table already exists
-  debug:
-    msg: "Table 'idiots' already exists in database 'your_database'"
-  when: table_check.stdout_lines | length > 0
-
-- name: Create table if it doesn't exist
-  mysql_sql:
-    login_user: admin
-    login_password: Password@123
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    database: your_database
-    query: >
-      CREATE TABLE idiots (
+  command:
+    cmd: |
+      mysql -u admin -pPassword@123 -e '
+      USE LZ;
+      CREATE TABLE IF NOT EXISTS idiots (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE
-      )
-  when: table_check.stdout_lines | length == 0
+      );
+      '
+    register: create_table_output
+    failed_when: "'Table already exists' not in create_table_output.stdout"
+
+- name: Insert records into table
+  command:
+    cmd: |
+      mysql -u admin -pPassword@123 -e '
+      USE LZ;
+      INSERT INTO idiots (name, email) VALUES ("Ashok", "Ashok@example.com");
+      INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
+      '
 
      
 
