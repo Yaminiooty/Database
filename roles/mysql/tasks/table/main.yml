@@ -35,13 +35,12 @@
       INSERT INTO idiots (name, email) VALUES ("Gopi", "Gopih@example.com");
       '
   register: insert_output
-  changed_when: false
-  failed_when: "'ERROR 1062' in insert_output.stderr"
+  failed_when: insert_output.rc != 0 and "'Duplicate entry' not in insert_output.stderr"
 
 - name: Display message for duplicate key
   debug:
     msg: "Duplicate key violation occurred."
-  when: "'ERROR 1062' in insert_output.stderr"
+  when: "'Duplicate entry' in insert_output.stderr"
 
 
 
