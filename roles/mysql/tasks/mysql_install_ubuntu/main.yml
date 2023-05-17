@@ -18,6 +18,11 @@
     name: mysql-client
     state: present
     
+- name: Install MySQLdb package
+  apt:
+    name: python3-mysqldb
+    state: present
+    
 - name: Start MySQL service
   become: yes
   service:
