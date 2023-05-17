@@ -1,4 +1,6 @@
----
+
+- name: Execute SQL queries
+  shell: mysql -u admin -pPassword@123 -e 'USE LZ' < "{{ playbook_dir }}/queries.sql"---
 
 - name: Check if table exists
   shell:
@@ -26,7 +28,7 @@
 
 
 - name: Execute SQL queries
-  shell: mysql -u admin -pPassword@123 -e 'USE LZ' < "{{ playbook_dir }}/queries.sql"
+  shell: mysql -u admin -pPassword@123 -e 'USE LZ' < "{{ sql_file }}"
   register: script_output
   ignore_errors: true
 
