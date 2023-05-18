@@ -28,7 +28,7 @@
 
 
 - name: Execute SQL queries
-  shell: mysql -u admin -pPassword@123 -e 'USE LZ' < "{{ sql_file }}"
+  shell: mysql -u admin -pPassword@123 -e 'USE LZ' < queries.sql
   register: script_output
   ignore_errors: true
 
