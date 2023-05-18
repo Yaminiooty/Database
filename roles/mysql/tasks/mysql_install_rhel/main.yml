@@ -6,6 +6,11 @@
     name: mysql-server
     state: present
     
+- name: Install pip for Python 3
+  package:
+     name: python3-pip
+     state: present
+    
 - name: Install Required pip modules
   become: yes
   pip:
