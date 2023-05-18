@@ -9,6 +9,7 @@
 
     
 - name: Install MySQL client package
+  become: yes
   package:
       name: mysql
     
