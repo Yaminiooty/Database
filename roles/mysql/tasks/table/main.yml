@@ -1,32 +1,24 @@
 ---
 
-- name: Check if table exists
-  shell:
-    cmd: |
-      mysql -u "{{ mysql_user }}" -p"{{ mysqluser_password }}" -N -s -e '
-      USE {{ dbname }} ; 
-      SELECT 1 FROM information_schema.tables WHERE table_schema = {{ dbname }} AND table_name = {{ tablename }} LIMIT 1;'
-  register: table_check_output
-  failed_when: false
-  changed_when: table_check_output.rc == 0
-
-- name: Display message if table exists
-  debug:
-    msg: 'Table {{ tablename }} already exists in database.'
-  when: table_check_output.rc == 0
-
 - name: Create table if it doesn't exist
   shell:
     cmd: |
       mysql -u "{{ mysql_user }}" -p"{{ mysqluser_password }}" -e '
       USE {{ dbname }} ;
-      CREATE TABLE {{ tablename }} (
+      CREATE TABLE IF NOT EXISTS {{ tablename }} (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE
       );
       '
-  when: table_check_output.rc != 0
+  register: create_table_output
+  failed_when: create_table_output.rc != 0
+
+- name: Display message if table already exists
+  debug:
+    msg: "Table {{ tablename }} already exists."
+  when: create_table_output.stdout.find('Table already exists') != -1
+
 
 - name: Insert records into table
   shell:
