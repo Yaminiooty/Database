@@ -35,9 +35,9 @@
       add_host:
         hostname: "{{ item.hostname }}"
         groups: [ 'linux' ]
-        ansible_ssh_user: "{{ sf_username }}"
-        ansible_ssh_pass: "{{ sf_password }}"
-        ansible_become_pass: "{{ sf_password }}"
+        ansible_ssh_user: "{{ sf_sshusername }}"
+        ansible_ssh_pass: "{{ sf_sshpassword }}"
+        ansible_become_pass: "{{ sf_sshpassword }}"
         ansible_ssh_host: "{{ item.hostname }}"
       loop: "{{ vmlist.list }}"
       when: vm == 'Linux'
