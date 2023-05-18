@@ -1,39 +1,50 @@
 
 ---
+
 - name: Check if table exists
   shell:
     cmd: |
-      mysql -u admin -pPassword@123 -N -s -e 'USE LZ; SELECT 1 FROM information_schema.tables WHERE table_schema = "LZ" AND table_name = "idiots" LIMIT 1;'
+      mysql -u admin -pPassword@123 -N -s -e 'USE "{{ dbname }}"; SELECT 1 FROM information_schema.tables WHERE table_schema = "{{ dbname }}" AND table_name = "{{ tablename }}" LIMIT 1;'
   register: table_check_output
   failed_when: false
   changed_when: table_check_output.rc == 0
 
 - name: Display message if table exists
   debug:
-    msg: "Table 'idiots' already exists."
+    msg: "Table "{{ tablename }}" already exists."
   when: table_check_output.rc == 0
 
 - name: Create table if it doesn't exist
-  command: echo "Running SQL queries..."
+  command:
+    cmd: |
+      mysql -u "{{ mysql_user}}" -p"{{ mysqluser_password }}" -e '
+      USE LZ;
+      CREATE TABLE "{{ tablename }}" (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        email VARCHAR(100) NOT NULL UNIQUE
+      );
+      '
   when: table_check_output.rc != 0
-  
-- name: Print playbook directory
-  debug:
-    var: playbook_dir
-- name: Print AWX project path
-  debug:
-    var: awx_project_path
 
-
-- name: Execute SQL queries
-  shell: mysql -u admin -pPassword@123 -e 'USE LZ' < queries.sql
-  register: script_output
+- name: Insert records into table
+  command:
+    cmd: |
+      mysql -u "{{ mysql_user}}" -p"{{ mysqluser_password }}" -e '
+      USE "{{ dbname }}";
+      INSERT INTO "{{ tablename }}" (name, email) VALUES ("Ashok", "Ashok@example.com");
+      INSERT INTO "{{ tablename }}" (name, email) VALUES ("Gopi", "Gopih@example.com");
+      '
+  register: insert_output
   ignore_errors: true
 
 - name: Display message for duplicate key
   debug:
     msg: "Duplicate key violation occurred."
-  when: "'Duplicate entry' in script_output.stderr"
+  when: "'Duplicate entry' in insert_output.stderr"
+
+
+
 
 
 
