@@ -1,10 +1,10 @@
-
 ---
 
 - name: Check if table exists
   shell:
     cmd: |
-      mysql -u admin -pPassword@123 -N -s -e 'USE "{{ dbname }}"; SELECT 1 FROM information_schema.tables WHERE table_schema = "{{ dbname }}" AND table_name = "{{ tablename }}" LIMIT 1;'
+      mysql -u "{{ mysql_user}}" -p"{{ mysqluser_password }}" -N -s -e 'USE "{{ dbname }}"; 
+      SELECT 1 FROM information_schema.tables WHERE table_schema = "{{ dbname }}" AND table_name = "{{ tablename }}" LIMIT 1;'
   register: table_check_output
   failed_when: false
   changed_when: table_check_output.rc == 0
@@ -18,7 +18,7 @@
   command:
     cmd: |
       mysql -u "{{ mysql_user}}" -p"{{ mysqluser_password }}" -e '
-      USE LZ;
+      USE "{{ dbname }}";
       CREATE TABLE "{{ tablename }}" (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
