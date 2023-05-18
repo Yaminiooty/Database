@@ -1,4 +1,9 @@
 ---
+- name: Update APT cache
+   become: yes
+   apt:
+     update_cache: yes
+     
 
 - name: install mysql
   become: yes
