@@ -22,10 +22,10 @@
   when: 
       - (ansible_distribution == 'Ubuntu') and ("'mysql' not in mysql_output.stdout")
 
-- name: Install MySQL for RHEL
-  include_tasks: mysql_install_rhel/main.yml
+- name: Install MySQL for Rocky
+  include_tasks: mysql_install_rocky/main.yml
   when: 
-      - (ansible_distribution == 'RHEL') and ("'mysql' not in mysql_output.stdout")
+      - (ansible_distribution == 'Rocky') and ("'mysql' not in mysql_output.stdout")
       
 - name: Include tasks for user creation
   include_tasks: user/main.yml
