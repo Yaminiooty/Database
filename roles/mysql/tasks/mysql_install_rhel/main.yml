@@ -8,15 +8,9 @@
     
 
     
-- name: Install MySQL server package
-  package:
-  name: mysql-server
-  state: present
-  
 - name: Install MySQL client package
   package:
-  name: mysql
-  state: present
+      name: mysql
     
     
 - name: Start MySQL service
