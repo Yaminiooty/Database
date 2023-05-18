@@ -1,4 +1,70 @@
 ---
+
+- name: read csv file of linux vms
+  hosts: localhost
+  vars_files:
+    - variable.yml
+  tasks:
+    - name: "check the status of the CSV file url from localhost"
+      uri:
+        url: "{{ url }}"
+        method: GET
+        timeout: 30
+        return_content: yes
+      register: out
+      ignore_errors: true
+    - name: status of csv file
+      debug:
+        msg: " CSV file is unreachable please use valid url link for inventory "
+      when: "{{ out.failed }} == true"
+    
+    - name: Download csv file for linux
+      get_url:
+        url: "{{ url }}"
+        dest: "{{ l_temp_list_path }}"
+      when: "{{ out.failed }} == false"
+    - name: Gather file stats
+      stat:
+        path: "{{ l_temp_list_path }}"
+      register: file_stats
+      when: "{{ out.failed }} == false"
+    - name: print
+      debug: 
+        var: file_stats
+    - name: Handle empty file
+      debug:
+        msg: "CSV File has no host ips"
+      when: file_stats.stat.size < 10
+      when: "{{ out.failed }} == false"
+    - name: read linux csv file
+      read_csv:
+              path: "{{ l_temp_list_path }}"
+      register: vmlist
+      when: "{{ out.failed }} == false"
+        
+    - name: read linux csv file
+      read_csv:
+        path: "{{ l_temp_list_path }}"
+      register: vmlist
+    - name: list the values in CSV file
+      debug:
+        var: "{{ item }}"
+      loop: "{{ vmlist.list }}"
+      when: "{{ out.failed }} == false" 
+    - name: removing entry from known_hosts if any already exist
+      known_hosts:
+         name: "{{ item.hostname }}"
+         path: "{{ l_ssh_path }}"
+         state: absent
+      with_items: "{{ vmlist.list }}"
+      when: "{{ out.failed }} == false"
+    - name: block state
+      include_tasks: select_check.yml
+      loop: "{{ vmlist.list }}"   
+      when: "{{ out.failed }} == false"
+      #when: vm == 'Linux' 
+   
+ 
 - name: Install Database
   hosts: all
   gather_facts: true
