@@ -25,7 +25,7 @@
       
 - name: Install PyMySQL package
   pip:
-     name: PyMySQL
+     name: python3-mysqldb
      executable: pip3
      state: present
     
