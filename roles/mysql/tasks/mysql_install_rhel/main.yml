@@ -5,7 +5,31 @@
   yum:
     name: mysql-server
     state: present
-
+    
+- name: install PyMySQL
+  become: yes
+  yum:
+    name: python3-pymysql
+    state: present
+    
+- name: Install MySQL client package
+  become: yes
+  yum:
+    name: mysql-client
+    state: present
+    
+- name: Install MySQLdb package
+  become: yes
+  yum:
+    name: python3-mysqldb
+    state: present
+    
+- name: Install MySQL client package
+  become: yes
+  yum:
+    name: mysql-client
+    state: present
+    
 - name: Start MySQL service
   become: yes
   service:
