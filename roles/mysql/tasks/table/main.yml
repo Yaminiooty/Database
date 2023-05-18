@@ -11,7 +11,7 @@
 
 - name: Display message if table exists
   debug:
-    msg: 'Table "{{ tablename }}" already exists in database "{{ dbname }}".'
+    msg: 'Table "{{ tablename }}" already exists in database.'
   when: table_check_output.rc == 0
 
 - name: Create table if it doesn't exist
