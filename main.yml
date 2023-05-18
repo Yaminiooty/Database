@@ -9,19 +9,19 @@
       get_url:
         url: "{{ sf_url }}"
         dest: "{{ l_temp_list_path }}"
-      when: vm == 'Linux'
+    
       
     - name: read linux csv file
       read_csv:
         path: "{{ l_temp_list_path }}"
       register: vmlist
-      when: vm == 'Linux'
+     
       
     - name: list the values in CSV file
       debug:
         var: "{{ item }}"
       loop: "{{ vmlist.list }}"
-      when: vm == 'Linux'
+      
       
     - name: removing entry from known_hosts if any already exist
       known_hosts:
@@ -29,7 +29,7 @@
         path: "{{ l_ssh_path }}"
         state: absent
       with_items: "{{ vmlist.list }}"
-      when: vm == 'Linux'
+      
       
     - name: create dynamic inventory for linux
       add_host:
@@ -37,7 +37,7 @@
         groups: [ 'linux' ]
         ansible_ssh_host: "{{ item.hostname }}"
       loop: "{{ vmlist.list }}"
-      when: vm == 'Linux'
+     
 
    
  
