@@ -3,7 +3,8 @@
 - name: Check if table exists
   shell:
     cmd: |
-      mysql -u "{{ mysql_user }}" -p"{{ mysqluser_password }}" -N -s -e 'USE "{{ dbname }}"; 
+      mysql -u "{{ mysql_user }}" -p"{{ mysqluser_password }}" -N -s -e '
+      USE "{{ dbname }}"; 
       SELECT 1 FROM information_schema.tables WHERE table_schema = "{{ dbname }}" AND table_name = "{{ tablename }}" LIMIT 1;'
   register: table_check_output
   failed_when: false
