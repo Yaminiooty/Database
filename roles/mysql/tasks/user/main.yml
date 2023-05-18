@@ -2,8 +2,8 @@
 - name: Create MySQL user and grant privileges
   become: true
   mysql_user:
-    name: admin
-    password: Password@123
+    name: "{{ mysql_user }}"
+    password: "{{ mysqluser_password }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
     priv: "*.*:ALL,GRANT"
     host: localhost
